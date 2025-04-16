@@ -141,18 +141,18 @@ def train(args, model, exp_dataset, exp_dataset_info, eval_env_settings, checkpo
             save_model(args, model, checkpoint_dir_iter)
             print('Checkpoint saved at:', checkpoint_dir_iter)
 
-        if iter % args.eval_per_iter == 0:
-            eval_logs = evaluate_episode(args, env=eval_env, model=model, target_return=target_return, max_ep_len=min(args.eval_max_ep_len, max_ep_len),
-                                         process_reward_fn=eval_process_reward_fn, use_head=args.use_head, seed=args.env_seed)
-            max_episode_return = eval_logs['ep_avg_return_max']
-            if best_eval_return < max_episode_return:
-                best_eval_return = max_episode_return
-                save_model(args, model, best_model_dir)
-                print('Best model saved at:', best_model_dir)
+        # if iter % args.eval_per_iter == 0:
+        #     eval_logs = evaluate_episode(args, env=eval_env, model=model, target_return=target_return, max_ep_len=min(args.eval_max_ep_len, max_ep_len),
+        #                                  process_reward_fn=eval_process_reward_fn, use_head=args.use_head, seed=args.env_seed)
+        #     max_episode_return = eval_logs['ep_avg_return_max']
+        #     if best_eval_return < max_episode_return:
+        #         best_eval_return = max_episode_return
+        #         save_model(args, model, best_model_dir)
+        #         print('Best model saved at:', best_model_dir)
 
-            eval_logs['best_return'] = best_eval_return
-            print('>' * 10, 'Evaluation Information')
-            pprint(eval_logs)
+        #     eval_logs['best_return'] = best_eval_return
+        #     print('>' * 10, 'Evaluation Information')
+        #     pprint(eval_logs)
     # save training losses
     train_losses_path = os.path.join(checkpoint_dir, 'train_losses.txt')
     np.savetxt(train_losses_path, total_train_losses, fmt='%.6f', delimiter='\n')
@@ -221,7 +221,8 @@ def run(args):
     # If args.device == args.device_out == args.device_mid (if not None), everything will be the same as using only one device.
     # plm, *_ = load_plm(args.plm_type, os.path.join(PLM_DIR, args.plm_type, args.plm_size), 
     #                    device_input_side=args.device, device_output_side=args.device_out, device_middle_side=args.device_mid)
-    plm, *_ = load_plm(args.plm_type, os.path.join(PLM_DIR, 'tinyllama'), 
+    # os.path.join(PLM_DIR, 'tinyllama')
+    plm, *_ = load_plm(args.plm_type, "TinyLlama/TinyLlama-1.1B-Chat-v1.0", 
                        device_input_side=args.device, device_output_side=args.device_out, device_middle_side=args.device_mid)
 
     if args.plm_type != 'llama':
