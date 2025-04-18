@@ -172,7 +172,7 @@ def run(args):
     # For data/modules near the output side, we use args.device_out.
     # For data/modules lying in the middle, we use args.device_mid (it can be None). 
     # If args.device == args.device_out == args.device_mid (if not None), everything will be the same as using only one device.
-    plm, *_ = load_plm(args.plm_type, os.path.join(cfg.plm_dir, args.plm_type, args.plm_size), 
+    plm, *_ = load_plm(args.plm_type, "meta-llama/Llama-2-7b-chat-hf", 
                        device_input_side=args.device, device_output_side=args.device_out, device_middle_side=args.device_mid)
 
     if args.plm_type != 'llama':
@@ -223,12 +223,12 @@ def run(args):
         console_log = open(os.path.join(models_dir, f'early_stop_{args.which_layer}_console.log'), 'w')
         sys.stdout = ConsoleLogger(sys.__stdout__, console_log)
         adapt(args, rl_policy, exp_dataset, exp_dataset_info, env_settings, checkpoint_dir, best_model_dir, process_reward)
-    if args.test:
-        if not os.path.exists(results_dir):
-            os.makedirs(results_dir)
-        model_dir = args.model_dir if args.model_dir is not None else best_model_dir
-        assert os.path.exists(model_dir), f'Model weight dir {model_dir} does not exist.'
-        test(args, rl_policy, exp_dataset_info, env_settings, model_dir, results_dir, process_reward)
+    # if args.test:
+    #     if not os.path.exists(results_dir):
+    #         os.makedirs(results_dir)
+    #     model_dir = args.model_dir if args.model_dir is not None else best_model_dir
+    #     assert os.path.exists(model_dir), f'Model weight dir {model_dir} does not exist.'
+    #     test(args, rl_policy, exp_dataset_info, env_settings, model_dir, results_dir, process_reward)
 
 
 if __name__ == '__main__':
@@ -298,9 +298,9 @@ if __name__ == '__main__':
     if args.device_out is None:  
         args.device_out = args.device
     
-    if args.save_checkpoint_per_epoch is None:
-        args.save_checkpoint_per_epoch = args.eval_per_epoch
-    assert args.save_checkpoint_per_epoch <= args.num_epochs
+    # if args.save_checkpoint_per_epoch is None:
+    args.save_checkpoint_per_epoch = args.eval_per_epoch
+    # assert args.save_checkpoint_per_epoch <= args.num_epochs
 
     print('Arguments:')
     pprint(args)

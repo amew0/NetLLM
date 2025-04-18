@@ -48,6 +48,9 @@ class Trainer:
             if step % report_loss_per_steps == 0:                
                 mean_train_loss = np.mean(train_losses)
                 print(f'Step {step} - mean train loss {mean_train_loss:>9f}')
+            
+            if step == 201:
+                break
 
         logs['time/training'] = time.time() - train_start
         logs['training/train_loss_mean'] = np.mean(train_losses)
