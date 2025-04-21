@@ -7,7 +7,8 @@ import torch.nn.functional as F
 import torch_geometric.utils as pyg_utils
 
 from collections import deque
-    
+
+from peft.peft_model import PeftModelForFeatureExtraction    
 
 INF = 1e5
 
@@ -51,7 +52,7 @@ class OfflineRLPolicy(nn.Module):
         self.max_length = max_length
 
         self.state_encoder = state_encoder
-        self.plm = plm
+        self.plm: PeftModelForFeatureExtraction = plm
         self.plm_embed_size = plm_embed_size
 
         self.embed_timestep = nn.Embedding(max_ep_len + 1, plm_embed_size).to(device)
@@ -169,7 +170,10 @@ class OfflineRLPolicy(nn.Module):
             output_hidden_states=True,
             stop_layer_idx=self.which_layer,
         )
-        logits = transformer_outputs['last_hidden_state']
+        logits = transformer_outputs['last_hidden_state'] # shape: (1, 469, 2048)
+        # logits = self.plm(stacked_inputs_ln) 
+        # import pdb
+        # pdb.set_trace()
         if self.residual:
             logits = logits + stacked_inputs_ln  # residual add
 

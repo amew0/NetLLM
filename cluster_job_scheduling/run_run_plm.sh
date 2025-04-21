@@ -6,7 +6,7 @@
     # --test \
 
 
-python run_plm.py \
+python -u run_plm.py \
     --train \
     --seed 666 \
     --plm-type llama \
@@ -17,5 +17,5 @@ python run_plm.py \
     --K 20 \
     --gamma 1.0 \
     --lr 0.0001 \
-    --num-iters 2 \
-    --num-steps-per-iter 101 \
+    # --num-iters 2 \
+    # --num-steps-per-iter 101 \
