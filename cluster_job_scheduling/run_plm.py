@@ -76,7 +76,7 @@ DEFAULT_USE_HEAD = UseStageHead.HEAD2
 
 import torch
 import torch.nn as nn
-class dummyPLM(nn.Module):
+class simpleMLP(nn.Module):
     def __init__(self, hidden_dim=2048):
         super().__init__()
         self.layernorm = nn.LayerNorm(2048)
@@ -264,7 +264,7 @@ def run(args):
     if args.rank != -1:
         plm = peft_model(plm, args.plm_type, rank=args.rank)
         
-    # plm = dummyPLM().to(args.device)
+    # plm = simpleMLP().to(args.device)
 
     # 5.2 create state encoder
     if args.pt_encoder_config is not None:
